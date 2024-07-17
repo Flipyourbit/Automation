@@ -1,0 +1,14 @@
+- hosts: "allnetsw"
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: pull interface data from arista
+      arista.eos.eos_facts:
+        gather_subset:
+        - interfaces
+      when: inventory_hostname in groups['arista7050qx']
+
+    - name: Print all available facts
+      ansible.builtin.debug:
+        var: ansible_facts
