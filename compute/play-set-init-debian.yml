@@ -2,17 +2,36 @@
 - hosts: "exthosting"
   gather_facts: yes
   become: yes
-
+  vars:
+    debusers: "{{ lookup('file','../env/var-deb-config.json') | from_json }}"
+    
   tasks:
     - name: Perform a dist-upgrade.
       ansible.builtin.apt:
         upgrade: dist
         update_cache: yes
 
+    - name: create user accounts
+      ansible.builtin.user:
+        name: "{{item.username}}"
+        create_home: yes
+        group: "{{item.group}}"
+        state: "{{item.ansstate}}"
+      loop: "{{debusers.users}}"
+
+    - name: Set authorized key taken from file
+      ansible.posix.authorized_key:
+        user: "{{item.username}}"
+        state: present
+        key: "{{ lookup('file', item.pubkeypath) }}"
+      loop: "{{debusers.users}}"
+
+
     - name: install  fyb required pkgs
       ansible.builtin.apt:
         pkg:
         - neofetch
+        - btop
 
     - name: Update all packages to their latest version
       ansible.builtin.apt:
@@ -32,3 +51,5 @@
     - name: Remove dependencies that are no longer required.
       ansible.builtin.apt:
         autoremove: yes
+
+

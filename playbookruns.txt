@@ -1,0 +1,1 @@
+ansible-playbook  -i ./env/inv-deb-config.json ./compute/play-test-ansible.yml  --check
