@@ -1,0 +1,46 @@
+---
+- hosts: "extgsdcksvr"
+  gather_facts: yes
+  become: yes
+
+# playbook play-set-init-debian.yml should be run before this  playbook to ensure the server is boot strapped for FYB deployment.
+# playbook deploys game server host  with docker support
+
+  tasks:
+
+    - name: update cache before install
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+  # need to add  step to install docker compose 
+
+

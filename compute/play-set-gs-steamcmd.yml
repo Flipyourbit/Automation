@@ -1,9 +1,20 @@
 ---
-- hosts: "exthosting"
+- hosts: "extgssteamcmd"
   gather_facts: yes
   become: yes
+  vars:
+    nixusers: "{{ lookup('file','../env/var-nix-users.json') | from_json }}"
 
   tasks:
+    - name: create user accounts
+      ansible.builtin.user:
+        name: "{{item.username}}"
+        create_home: yes
+        shell: /bin/bash
+        group: "{{item.group}}"
+        state: "{{item.ansstate}}"
+      loop: "{{nixusers.steamcmdusers}}"
+
     - name: Perform a dist-upgrade.
       ansible.builtin.apt:
         upgrade: dist

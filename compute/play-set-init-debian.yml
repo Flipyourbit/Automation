@@ -1,9 +1,9 @@
 ---
-- hosts: "exthosting"
+- hosts: "ubuntunew"
   gather_facts: yes
   become: yes
   vars:
-    debusers: "{{ lookup('file','../env/var-deb-config.json') | from_json }}"
+    debusers: "{{ lookup('file','../env/var-nix-users.json') | from_json }}"
     
   tasks:
     - name: Perform a dist-upgrade.
@@ -15,16 +15,17 @@
       ansible.builtin.user:
         name: "{{item.username}}"
         create_home: yes
+        shell: /bin/bash
         group: "{{item.group}}"
         state: "{{item.ansstate}}"
-      loop: "{{debusers.users}}"
+      loop: "{{debusers.initusers}}"
 
     - name: Set authorized key taken from file
       ansible.posix.authorized_key:
         user: "{{item.username}}"
         state: present
         key: "{{ lookup('file', item.pubkeypath) }}"
-      loop: "{{debusers.users}}"
+      loop: "{{debusers.initusers}}"
 
 
     - name: install  fyb required pkgs
