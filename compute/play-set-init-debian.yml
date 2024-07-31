@@ -6,12 +6,13 @@
     debusers: "{{ lookup('file','../env/var-nix-users.json') | from_json }}"
     
   tasks:
-    - include: task-set-nixusers.yml
+    - ansible.builtin.import_tasks: task-set-nixusers.yml
     
     - name: Perform a dist-upgrade.
       ansible.builtin.apt:
         upgrade: dist
         update_cache: yes
+
     - name: install  fyb required pkgs
       ansible.builtin.apt:
         pkg:
