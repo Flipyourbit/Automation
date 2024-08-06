@@ -1,5 +1,5 @@
 ---
-- hosts: "alldebsvr"
+- hosts: "gamehostingamp"
   gather_facts: yes
   become: yes
   vars:

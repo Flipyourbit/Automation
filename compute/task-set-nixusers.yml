@@ -13,4 +13,4 @@
         state: present
         key: "{{ lookup('file', item.pubkeypath) }}"
       loop: "{{debusers.initusers}}"
-# asnible Task for deploying  fyb users and keys to server
+# asnible Task for deploying  fyb users and keys to servers
