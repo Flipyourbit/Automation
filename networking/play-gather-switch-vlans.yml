@@ -7,9 +7,8 @@
     - name: Gather VLAN data from Arista Switch
       arista.eos.eos_vlans: 
         state: gathered
-        tags:
-          - arista
 
+      
     - name: Gather VLAN data from cisco switch
       cisco.ios.ios_facts:
         gather_subset:
@@ -17,5 +16,3 @@
           - "!min"
         gather_network_resources:
           - vlans
-        tags:
-          - cisco
