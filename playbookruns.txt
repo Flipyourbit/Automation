@@ -1,0 +1,9 @@
+ansible-playbook  -i ./env/inv-deb-config.json ./compute/play-test-ansible.yml  --check
+
+
+
+Notes:
+
+
+
+ansible all -i localhost, -m debug -a "msg={{ 'mypassword' | password_hash('sha512', 'mysecretsalt') }}"

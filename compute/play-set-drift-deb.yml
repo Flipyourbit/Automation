@@ -1,0 +1,10 @@
+---
+- hosts: "gamehostingamp"
+  gather_facts: yes
+  become: yes
+  vars:
+    debusers: "{{ lookup('file','../env/var-nix-users.json') | from_json }}"
+    
+  tasks:
+  # Deploys standard users and  key auth to all debian based systems
+    - ansible.builtin.import_tasks: task-set-nixusers.yml

@@ -1,0 +1,16 @@
+    - name: create user accounts
+      ansible.builtin.user:
+        name: "{{item.username}}"
+        create_home: yes
+        shell: /bin/bash
+        group: "{{item.group}}"
+        state: "{{item.ansstate}}"
+      loop: "{{debusers.initusers}}"
+
+    - name: Set authorized key taken from file
+      ansible.posix.authorized_key:
+        user: "{{item.username}}"
+        state: present
+        key: "{{ lookup('file', item.pubkeypath) }}"
+      loop: "{{debusers.initusers}}"
+# asnible Task for deploying  fyb users and keys to servers
