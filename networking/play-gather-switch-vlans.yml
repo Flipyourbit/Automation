@@ -1,0 +1,17 @@
+---
+- hosts: "arista7050qx"
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: Gather VLAN data from Arista Switch
+      arista.eos.eos_vlans: 
+        state: gathered
+
+    - name: Gather VLAN data from cisco switch
+      cisco.ios.ios_facts:
+        gather_subset:
+          - "!all"
+          - "!min"
+        gather_network_resources:
+          - vlans

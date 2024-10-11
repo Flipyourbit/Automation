@@ -1,9 +1,0 @@
----
-- hosts: "arista7050qx"
-  become: true
-  gather_facts: no
-
-  tasks:
-    - name: Gather VLAN data from Arista Switch
-      arista.eos.eos_vlans: 
-        state: gathered
