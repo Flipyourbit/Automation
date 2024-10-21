@@ -1,5 +1,5 @@
 ---
-- hosts: "allcisco"
+- hosts: "Aallnetsw"
   become: false
   gather_facts: no
   vars:
