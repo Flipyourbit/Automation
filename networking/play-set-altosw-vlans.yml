@@ -1,5 +1,5 @@
 ---
-- hosts: "Aallnetsw"
+- hosts: "allnetsw"
   become: false
   gather_facts: no
   vars:
@@ -16,7 +16,7 @@
         state: "{{ item.ansstate }}"
       when: inventory_hostname in groups['allcisco']
       loop:  "{{ wpdvlan }}"
-      
+
     - name: merge VLAN into arista switch
       arista.eos.eos_vlans:
         config:
