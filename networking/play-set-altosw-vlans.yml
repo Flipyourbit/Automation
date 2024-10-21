@@ -1,6 +1,6 @@
 ---
 - hosts: "allnetsw"
-  become: false
+
   gather_facts: no
   vars:
     wpdvlan: "{{ lookup('file','../env/inv-fybvlans.json') | from_json }}"
@@ -8,6 +8,7 @@
 
   tasks: 
     - name: merge VLAN into Cisco switch
+      become: false
       cisco.ios.ios_vlans:
         config:
         - vlan_id: "{{ item.vlan_id }}"
@@ -18,6 +19,7 @@
       loop:  "{{ wpdvlan }}"
 
     - name: merge VLAN into arista switch
+      become: true
       arista.eos.eos_vlans:
         config:
         - vlan_id: "{{ item.vlan_id }}"
