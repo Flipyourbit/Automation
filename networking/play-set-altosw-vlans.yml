@@ -16,3 +16,13 @@
         state: "{{ item.ansstate }}"
       when: inventory_hostname in groups['allcisco']
       loop:  "{{ wpdvlan }}"
+      
+    - name: merge VLAN into arista switch
+      arista.eos.eos_vlans:
+        config:
+        - vlan_id: "{{ item.vlan_id }}"
+          name:  "{{ item.name }}"
+          state: "{{ item.state }}"
+        state: "{{ item.ansstate }}"
+      when: inventory_hostname in groups['arista7050qx']
+      loop:  "{{ wpdvlan }}"
