@@ -17,6 +17,8 @@
         state: "{{ item.ansstate }}"
       when: inventory_hostname in groups['allcisco']
       loop:  "{{ wpdvlan }}"
+      async: 1000
+      poll: 0
 
     - name: merge VLAN into arista switch
       become: true
@@ -28,5 +30,5 @@
         state: "{{ item.ansstate }}"
       when: inventory_hostname in groups['arista7050qx']
       loop:  "{{ wpdvlan }}"
-      async: 60
+      async: 1000
       poll: 0
