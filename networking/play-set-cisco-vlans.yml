@@ -1,0 +1,18 @@
+---
+- hosts: "cisco365048"
+
+  gather_facts: no
+  vars:
+    wpdvlan: "{{ lookup('file','../env/inv-fybvlans.json') | from_json }}"
+
+
+  tasks:
+    - name: merge VLAN into Cisco switch
+      become: false
+      cisco.ios.ios_vlans:
+        config:
+        - vlan_id: "{{ item.vlan_id }}"
+          name:  "{{ item.name }}"
+          state: "{{ item.state }}"
+        state: "{{ item.ansstate }}"
+      loop:  "{{ wpdvlan }}"
