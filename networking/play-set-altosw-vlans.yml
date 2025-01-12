@@ -15,7 +15,21 @@
           name:  "{{ item.name }}"
           state: "{{ item.state }}"
         state: "{{ item.ansstate }}"
-      when: inventory_hostname in groups['allcisco']
+      when: inventory_hostname in groups['ciscocat']
+      loop:  "{{ wpdvlan }}"
+      async: 1000
+      poll: 0
+
+    - name: merge VLAN into Cisco nexus core switch
+      become: false
+      cisco.nxos.nxos_vlans:
+        config:
+        - vlan_id: "{{ item.vlan_id }}"
+          name:  "{{ item.name }}"
+          enabled: true
+          state: "{{ item.state }}"
+        state: "{{ item.ansstate }}"
+      when: inventory_hostname in groups['cisconex']
       loop:  "{{ wpdvlan }}"
       async: 1000
       poll: 0
