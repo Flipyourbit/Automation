@@ -13,4 +13,20 @@
         state: present
         key: "{{ lookup('file', item.pubkeypath) }}"
       loop: "{{debusers.initusers}}"
+
+    - name: Create a passwordless sudoers drop-in file
+      ansible.builtin.copy:
+        dest: "/etc/sudoers.d/{{item.username}}"
+        content: "{{item.username}} ALL=(ALL) NOPASSWD: ALL"
+        owner: root
+        group: root
+        mode: '0440'
+        validate: 'visudo -cf %s'
+      loop: "{{debusers.initusers}}"
+
+    - name: Disable password Login for users
+      ansible.builtin.user:
+        name: "{{item.username}}"
+        password_lock: yes
+      loop: "{{debusers.initusers}}"
 # asnible Task for deploying  fyb users and keys to servers
